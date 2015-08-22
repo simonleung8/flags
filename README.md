@@ -1,4 +1,5 @@
-# flags - Golang command-line flag parser  [![Build Status](https://travis-ci.org/simonleung8/flags.png?branch=master)](https://travis-ci.org/simonleung8/flags)
+# flags - Golang command-line flag parser
+[![GoDoc](https://godoc.org/github.com/simonleung8/flags?status.svg)](https://godoc.org/github.com/simonleung8/flags) [![Build Status](https://travis-ci.org/simonleung8/flags.png?branch=master)](https://travis-ci.org/simonleung8/flags)
 
 - Simple to use, little learning curve
 - Fully tested, reliable
