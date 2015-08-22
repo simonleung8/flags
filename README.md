@@ -24,7 +24,7 @@ Import "github.com/simonleung8/flags"
 func main(){
   fc := flags.New()
   fc.NewStringFlag("s", "string flag name s")  //name and usage of the string flag
-  fc.Parse(os.Args)
+  fc.Parse(os.Args...)
   println("Flag 's' is set: ", fc.IsSet("s"))
   println("Flag 's' value: ", fc.String("s"))
 }
@@ -57,6 +57,28 @@ Flags: String, Int, Bool, String Slice
 (fc *FlagContext)StringSlice(string)[]string
 (fc *FlagContext)Args()[]string
 ```
+
+# Parsing flags and arguments
+```Go
+fc := flags.New()
+fc.NewIntFlag("i", "Int flag name i")  //set up a Int flag '-i'
+fc.NewBoolFlag("verbose", "Bool flag name verbose")  //set up a bool flag '-verbose'
+err := fc.Parse(os.Args...) //Parse() returns any error it finds during parsing
+If err != nil {
+  fmt.Println("Parsing error:", err)
+}
+fmt.Println("Args:", fc.Args())
+fmt.Println("Verbose:", fc.Bool("verbose"))
+fmt.Println("i:", fc.Int("i"))
+```
+Running above
+```bash
+$ app arg_1 -i 100 arg_2 -verbose  # run the code
+Args: [arg_1 arg_2]
+Verbose: true
+i: 100
+```
+Parse( ) catches non-defined flag error and input type error for Int flag and Bool flag.
 
 # Special function
 ```Go
