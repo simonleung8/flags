@@ -25,6 +25,13 @@ type FlagContext interface {
 	StringSlice(string) []string
 	IsSet(string) bool
 	SkipFlagParsing(bool)
+	NewStringFlag(string, string)
+	NewStringFlagWithDefault(string, string, string)
+	NewBoolFlag(string, string)
+	NewIntFlag(string, string)
+	NewIntFlagWithDefault(string, string, int)
+	NewStringSliceFlag(string, string)
+	NewStringSliceFlagWithDefault(string, string, []string)
 }
 
 type flagContext struct {
@@ -33,6 +40,14 @@ type flagContext struct {
 	cmdFlags        map[string]FlagSet //valid flags for command
 	cursor          int
 	skipFlagParsing bool
+}
+
+func New() FlagContext {
+	return &flagContext{
+		flagsets: make(map[string]FlagSet),
+		cmdFlags: make(map[string]FlagSet),
+		cursor:   0,
+	}
 }
 
 func NewFlagContext(cmdFlags map[string]FlagSet) FlagContext {

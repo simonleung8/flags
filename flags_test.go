@@ -13,7 +13,6 @@ var _ = Describe("Flags", func() {
 	Describe("FlagContext", func() {
 
 		Describe("Parsing and retriving values", func() {
-
 			var (
 				fCtx       FlagContext
 				cmdFlagMap map[string]FlagSet
