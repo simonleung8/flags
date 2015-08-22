@@ -22,7 +22,7 @@ package main
 Import "github.com/simonleung8/flags"
 
 func main(){
-  fc := New()
+  fc := flags.New()
   fc.NewStringFlag("s", "string flag name s")  # name and usage of the string flag
   fc.Parse(os.Args)
   println("Flag 's' is set: ", fc.IsSet("s"))
