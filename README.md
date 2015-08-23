@@ -3,6 +3,7 @@
 
 - Simple to use, little learning curve
 - Fully tested, reliable
+- Catches any non-defined flags, and any invalid flag values
 - Flags can come before or after the arguments. The followings are all valid inputs:
 ```bash
 $ testapp -i 100 -m 500 arg1 arg2   # flags go first
@@ -25,7 +26,7 @@ Import "github.com/simonleung8/flags"
 func main(){
   fc := flags.New()
   fc.NewStringFlag("s", "string flag name s")  //name and usage of the string flag
-  fc.Parse(os.Args...)
+  fc.Parse(os.Args...)  //parse the OS arguments
   println("Flag 's' is set: ", fc.IsSet("s"))
   println("Flag 's' value: ", fc.String("s"))
 }
@@ -58,7 +59,7 @@ String(string)string
 Int(string)int
 Float64(string)float64
 Bool(string)bool
-StringSlice(string)[]string
+StringSlice(string)[]string  //this flag can be supplied more than 1 time
 Args()[]string
 ```
 
@@ -71,7 +72,7 @@ err := fc.Parse(os.Args...) //Parse() returns any error it finds during parsing
 If err != nil {
   fmt.Println("Parsing error:", err)
 }
-fmt.Println("Args:", fc.Args())
+fmt.Println("Args:", fc.Args())  //Args() returns an array of all the arguments
 fmt.Println("Verbose:", fc.Bool("verbose"))
 fmt.Println("i:", fc.Int("i"))
 ```
@@ -82,9 +83,10 @@ Args: [arg_1 arg_2]
 Verbose: true
 i: 100
 ```
-Parse( ) catches any non-defined flag error and input type error for Int, Float64 and Bool flag.
+Parse( ) catches any non-defined flags and invalid value for Int, Float64 and Bool flag.
 
 # Special function
 ```Go
-(fc *FlagContext)SkipFlagParsing(bool)  //if set to true, all flags become arguments
+SkipFlagParsing(bool)  //if set to true, all flags become arguments
+ShowUsage()string  //string containing all the flags and their usage text
 ```
