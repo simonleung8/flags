@@ -81,6 +81,32 @@ var _ = Describe("Flag Constructors", func() {
 		})
 	})
 
+	Describe("NewFloat64Flag()", func() {
+		It("init the flag context with a new float64 flagset", func() {
+			fc.Parse("-f", "5.5")
+			Ω(fc.IsSet("f")).To(BeFalse())
+			Ω(fc.Float64("f")).To(Equal(float64(0)))
+
+			fc.NewFloat64Flag("f", "setting new flag")
+			fc.Parse("-f", "5.5")
+			Ω(fc.IsSet("f")).To(BeTrue())
+			Ω(fc.Float64("f")).To(Equal(5.5))
+		})
+	})
+
+	Describe("NewFloat64FlagWithDefault()", func() {
+		It("init the flag context with a new Float64 flagset with default value", func() {
+			fc.Parse()
+			Ω(fc.IsSet("i")).To(BeFalse())
+			Ω(fc.Float64("i")).To(Equal(float64(0)))
+
+			fc.NewFloat64FlagWithDefault("i", "setting new flag", 5.5)
+			fc.Parse()
+			Ω(fc.IsSet("i")).To(BeTrue())
+			Ω(fc.Float64("i")).To(Equal(5.5))
+		})
+	})
+
 	Describe("NewStringSliceFlag()", func() {
 		It("init the flag context with a new StringSlice flagset", func() {
 			fc.Parse("-s", "5", "-s", "6")

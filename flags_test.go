@@ -24,6 +24,7 @@ var _ = Describe("Flags", func() {
 				cmdFlagMap["name"] = &cliFlags.StringFlag{Name: "name", Usage: "test string flag"}
 				cmdFlagMap["skip"] = &cliFlags.BoolFlag{Name: "skip", Usage: "test bool flag"}
 				cmdFlagMap["instance"] = &cliFlags.IntFlag{Name: "instance", Usage: "test int flag"}
+				cmdFlagMap["float"] = &cliFlags.Float64Flag{Name: "float", Usage: "test float64 flag"}
 				cmdFlagMap["skip2"] = &cliFlags.BoolFlag{Name: "skip2", Usage: "test bool flag"}
 				cmdFlagMap["slice"] = &cliFlags.StringSliceFlag{Name: "slice", Usage: "test stringSlice flag"}
 
@@ -112,6 +113,17 @@ var _ = Describe("Flags", func() {
 				Ω(fCtx.IsSet("non-exist-flag")).To(Equal(false))
 			})
 
+			It("sets Float64(<flag>) to return provided value when a float64 flag is provided", func() {
+				err := fCtx.Parse("-float", "10.5")
+				Ω(err).ToNot(HaveOccurred())
+
+				Ω(fCtx.Float64("float")).To(Equal(10.5))
+				Ω(fCtx.IsSet("float")).To(Equal(true))
+
+				Ω(fCtx.Float64("non-exist-flag")).To(Equal(float64(0)))
+				Ω(fCtx.IsSet("non-exist-flag")).To(Equal(false))
+			})
+
 			It("returns any non-flag arguments in Args()", func() {
 				err := fCtx.Parse("Arg-1", "--instance", "10", "--skip", "Arg-2")
 				Ω(err).ToNot(HaveOccurred())
@@ -146,6 +158,7 @@ var _ = Describe("Flags", func() {
 					cmdFlagMap["defaultBoolFlag"] = &cliFlags.BoolFlag{Name: "defaultBoolFlag", Value: true}
 					cmdFlagMap["defaultIntFlag"] = &cliFlags.IntFlag{Name: "defaultIntFlag", Value: 100}
 					cmdFlagMap["defaultStringAryFlag"] = &cliFlags.StringSliceFlag{Name: "defaultStringAryFlag", Value: []string{"abc", "def"}}
+					cmdFlagMap["defaultFloat64Flag"] = &cliFlags.Float64Flag{Name: "defaultFloat64Flag", Value: 100.5}
 					cmdFlagMap["noDefaultStringFlag"] = &cliFlags.StringFlag{Name: "noDefaultStringFlag"}
 
 					fCtx = NewFlagContext(cmdFlagMap)
@@ -163,6 +176,9 @@ var _ = Describe("Flags", func() {
 
 					Ω(fCtx.Int("defaultIntFlag")).To(Equal(100))
 					Ω(fCtx.IsSet("defaultIntFlag")).To(BeTrue())
+
+					Ω(fCtx.Float64("defaultFloat64Flag")).To(Equal(100.5))
+					Ω(fCtx.IsSet("defaultFloat64Flag")).To(BeTrue())
 
 					Ω(fCtx.StringSlice("defaultStringAryFlag")).To(Equal([]string{"abc", "def"}))
 					Ω(fCtx.IsSet("defaultStringAryFlag")).To(BeTrue())

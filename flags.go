@@ -20,6 +20,7 @@ type FlagContext interface {
 	Parse(...string) error
 	Args() []string
 	Int(string) int
+	Float64(string) float64
 	Bool(string) bool
 	String(string) string
 	StringSlice(string) []string
@@ -30,6 +31,8 @@ type FlagContext interface {
 	NewBoolFlag(string, string)
 	NewIntFlag(string, string)
 	NewIntFlagWithDefault(string, string, int)
+	NewFloat64Flag(string, string)
+	NewFloat64FlagWithDefault(string, string, float64)
 	NewStringSliceFlag(string, string)
 	NewStringSliceFlagWithDefault(string, string, []string)
 }
@@ -87,9 +90,18 @@ func (c *flagContext) Parse(args ...string) error {
 				}
 				i, err := strconv.ParseInt(v, 10, 32)
 				if err != nil {
-					return errors.New("Value for flag '" + flg + "' must be integer")
+					return errors.New("Value for flag '" + flg + "' must be an integer")
 				}
 				c.flagsets[flg] = &cliFlags.IntFlag{Name: flg, Value: int(i)}
+			case float64:
+				if v, err = c.getFlagValue(args); err != nil {
+					return err
+				}
+				i, err := strconv.ParseFloat(v, 64)
+				if err != nil {
+					return errors.New("Value for flag '" + flg + "' must be a float64")
+				}
+				c.flagsets[flg] = &cliFlags.Float64Flag{Name: flg, Value: float64(i)}
 			case string:
 				if v, err = c.getFlagValue(args); err != nil {
 					return err
@@ -157,6 +169,17 @@ func (c *flagContext) Int(k string) int {
 	return 0
 }
 
+func (c *flagContext) Float64(k string) float64 {
+	if _, ok := c.flagsets[k]; ok {
+		v := c.flagsets[k].GetValue()
+		switch v.(type) {
+		case float64:
+			return v.(float64)
+		}
+	}
+	return 0
+}
+
 func (c *flagContext) String(k string) string {
 	if _, ok := c.flagsets[k]; ok {
 		v := c.flagsets[k].GetValue()
@@ -216,6 +239,10 @@ func (c *flagContext) setDefaultFlagValueIfAny() {
 		case int:
 			if v.(int) != 0 {
 				c.flagsets[flgName] = &cliFlags.IntFlag{Name: flgName, Value: v.(int)}
+			}
+		case float64:
+			if v.(float64) != 0 {
+				c.flagsets[flgName] = &cliFlags.Float64Flag{Name: flgName, Value: v.(float64)}
 			}
 		case string:
 			if len(v.(string)) != 0 {
