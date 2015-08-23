@@ -38,25 +38,28 @@ Flag 's' value: abc
 ```
 
 # Available Flag Constructor
-Flags: String, Int, Bool, String Slice
+Flags: String, Int, float64, Bool, String Slice
 ```Go
-(fc *FlagContext)NewStringFlag(name string, usage string)
-(fc *FlagContext)NewStringFlagWithDefault(name string, usage string, default string)
-(fc *FlagContext)NewIntFlag(name string, usage string)
-(fc *FlagContext)NewIntFlagWithDefault(name string, usage string, default int)
-(fc *FlagContext)NewStringSliceFlag(name string, usage string)
-(fc *FlagContext)NewStringSliceFlagWithDefault(name string, usage string, default []string)
-(fc *FlagContext)NewBoolFlag(name string, usage string)
+NewStringFlag(name string, usage string)
+NewStringFlagWithDefault(name string, usage string, default string)
+NewIntFlag(name string, usage string)
+NewIntFlagWithDefault(name string, usage string, default int)
+NewFloat64Flag(name string, usage string)
+NewFloat64FlagWithDefault(name string, usage string, default float64)
+NewStringSliceFlag(name string, usage string)
+NewStringSliceFlagWithDefault(name string, usage string, default []string)
+NewBoolFlag(name string, usage string)
 ```
 
-# Functions for flag/args reading
+# Functions for flags/args reading
 ```Go
-(fc *FlagContext)IsSet(string)bool
-(fc *FlagContext)String(string)string
-(fc *FlagContext)Int(string)int
-(fc *FlagContext)Bool(string)bool
-(fc *FlagContext)StringSlice(string)[]string
-(fc *FlagContext)Args()[]string
+IsSet(string)bool
+String(string)string
+Int(string)int
+Float64(string)float64
+Bool(string)bool
+StringSlice(string)[]string
+Args()[]string
 ```
 
 # Parsing flags and arguments
@@ -79,7 +82,7 @@ Args: [arg_1 arg_2]
 Verbose: true
 i: 100
 ```
-Parse( ) catches non-defined flag error and input type error for Int flag and Bool flag.
+Parse( ) catches any non-defined flag error and input type error for Int, Float64 and Bool flag.
 
 # Special function
 ```Go
