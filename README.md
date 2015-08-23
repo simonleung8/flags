@@ -88,5 +88,5 @@ Parse( ) catches any non-defined flags and invalid value for Int, Float64 and Bo
 # Special function
 ```Go
 SkipFlagParsing(bool)  //if set to true, all flags become arguments
-ShowUsage()string  //string containing all the flags and their usage text
+ShowUsage(leadingSpace int)string  //string containing all the flags and their usage text
 ```
