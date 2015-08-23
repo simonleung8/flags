@@ -35,6 +35,7 @@ type FlagContext interface {
 	NewFloat64FlagWithDefault(string, string, float64)
 	NewStringSliceFlag(string, string)
 	NewStringSliceFlagWithDefault(string, string, []string)
+	ShowUsage(leadingSpace int) string
 }
 
 type flagContext struct {
