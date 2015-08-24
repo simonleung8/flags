@@ -10,13 +10,23 @@ func (c *flagContext) ShowUsage(leadingSpace int) string {
 
 		//find longest name length
 		l := 0
-		for n, _ := range c.cmdFlags {
+		for n, f := range c.cmdFlags {
+			shortName := f.GetShortName()
+			if shortName != "" {
+				n = n + ", -" + shortName
+			}
+
 			if len(n) > l {
 				l = len(n)
 			}
 		}
 		//print non-bool flags first
 		for n, f := range c.cmdFlags {
+			shortName := f.GetShortName()
+			if shortName != "" {
+				n = n + ", -" + shortName
+			}
+
 			switch f.GetValue().(type) {
 			case bool:
 			default:
@@ -26,6 +36,11 @@ func (c *flagContext) ShowUsage(leadingSpace int) string {
 
 		//then bool flags
 		for n, f := range c.cmdFlags {
+			shortName := f.GetShortName()
+			if shortName != "" {
+				n = n + ", -" + shortName
+			}
+
 			switch f.GetValue().(type) {
 			case bool:
 				if len(f.GetName()) == 1 {

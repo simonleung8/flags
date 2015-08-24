@@ -3,9 +3,10 @@ package cliFlags
 import "strconv"
 
 type Float64Flag struct {
-	Name  string
-	Value float64
-	Usage string
+	Name      string
+	Value     float64
+	Usage     string
+	ShortName string
 }
 
 func (f *Float64Flag) Set(v string) {
@@ -19,6 +20,10 @@ func (f *Float64Flag) String() string {
 
 func (f *Float64Flag) GetName() string {
 	return f.Name
+}
+
+func (f *Float64Flag) GetShortName() string {
+	return f.ShortName
 }
 
 func (f *Float64Flag) GetValue() interface{} {

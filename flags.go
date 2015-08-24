@@ -12,6 +12,7 @@ import (
 type FlagSet interface {
 	fmt.Stringer
 	GetName() string
+	GetShortName() string
 	GetValue() interface{}
 	Set(string)
 }
@@ -26,15 +27,15 @@ type FlagContext interface {
 	StringSlice(string) []string
 	IsSet(string) bool
 	SkipFlagParsing(bool)
-	NewStringFlag(string, string)
-	NewStringFlagWithDefault(string, string, string)
-	NewBoolFlag(string, string)
-	NewIntFlag(string, string)
-	NewIntFlagWithDefault(string, string, int)
-	NewFloat64Flag(string, string)
-	NewFloat64FlagWithDefault(string, string, float64)
-	NewStringSliceFlag(string, string)
-	NewStringSliceFlagWithDefault(string, string, []string)
+	NewStringFlag(name string, shortName string, usage string)
+	NewStringFlagWithDefault(name string, shortName string, usage string, value string)
+	NewBoolFlag(name string, shortName string, usage string)
+	NewIntFlag(name string, shortName string, usage string)
+	NewIntFlagWithDefault(name string, shortName string, usage string, value int)
+	NewFloat64Flag(name string, shortName string, usage string)
+	NewFloat64FlagWithDefault(name string, shortName string, usage string, value float64)
+	NewStringSliceFlag(name string, shortName string, usage string)
+	NewStringSliceFlagWithDefault(name string, shortName string, usage string, value []string)
 	ShowUsage(leadingSpace int) string
 }
 
@@ -79,7 +80,10 @@ func (c *flagContext) Parse(args ...string) error {
 			c.extractEqualSignIfAny(&flg, &args)
 
 			if flagset, ok = c.cmdFlags[flg]; !ok {
-				return errors.New("Invalid flag: " + arg)
+				flg = c.getFlagNameWithShortName(flg)
+				if flagset, ok = c.cmdFlags[flg]; !ok {
+					return errors.New("Invalid flag: " + arg)
+				}
 			}
 
 			switch flagset.GetValue().(type) {
@@ -153,63 +157,72 @@ func (c *flagContext) Args() []string {
 }
 
 func (c *flagContext) IsSet(k string) bool {
-	if _, ok := c.flagsets[k]; ok {
-		return true
-	}
-	return false
+	return c.isFlagProvided(&k)
 }
 
 func (c *flagContext) Int(k string) int {
-	if _, ok := c.flagsets[k]; ok {
-		v := c.flagsets[k].GetValue()
-		switch v.(type) {
-		case int:
-			return v.(int)
-		}
+	if !c.isFlagProvided(&k) {
+		return 0
 	}
+
+	v := c.flagsets[k].GetValue()
+	switch v.(type) {
+	case int:
+		return v.(int)
+	}
+
 	return 0
 }
 
 func (c *flagContext) Float64(k string) float64 {
-	if _, ok := c.flagsets[k]; ok {
-		v := c.flagsets[k].GetValue()
-		switch v.(type) {
-		case float64:
-			return v.(float64)
-		}
+	if !c.isFlagProvided(&k) {
+		return 0
+	}
+
+	v := c.flagsets[k].GetValue()
+	switch v.(type) {
+	case float64:
+		return v.(float64)
 	}
 	return 0
 }
 
 func (c *flagContext) String(k string) string {
-	if _, ok := c.flagsets[k]; ok {
-		v := c.flagsets[k].GetValue()
-		switch v.(type) {
-		case string:
-			return v.(string)
-		}
+	if !c.isFlagProvided(&k) {
+		return ""
+	}
+
+	v := c.flagsets[k].GetValue()
+	switch v.(type) {
+	case string:
+		return v.(string)
 	}
 	return ""
 }
 
 func (c *flagContext) Bool(k string) bool {
-	if _, ok := c.flagsets[k]; ok {
-		v := c.flagsets[k].GetValue()
-		switch v.(type) {
-		case bool:
-			return v.(bool)
-		}
+	if !c.isFlagProvided(&k) {
+		return false
 	}
+
+	v := c.flagsets[k].GetValue()
+	switch v.(type) {
+	case bool:
+		return v.(bool)
+	}
+
 	return false
 }
 
 func (c *flagContext) StringSlice(k string) []string {
-	if _, ok := c.flagsets[k]; ok {
-		v := c.flagsets[k].GetValue()
-		switch v.(type) {
-		case []string:
-			return v.([]string)
-		}
+	if !c.isFlagProvided(&k) {
+		return []string{}
+	}
+
+	v := c.flagsets[k].GetValue()
+	switch v.(type) {
+	case []string:
+		return v.([]string)
 	}
 	return []string{}
 }
@@ -256,4 +269,24 @@ func (c *flagContext) setDefaultFlagValueIfAny() {
 		}
 	}
 
+}
+
+func (c *flagContext) getFlagNameWithShortName(shortName string) string {
+	for n, f := range c.cmdFlags {
+		if f.GetShortName() == shortName {
+			return n
+		}
+	}
+	return ""
+}
+
+func (c *flagContext) isFlagProvided(flg *string) bool {
+	if _, ok := c.flagsets[*flg]; !ok {
+		*flg = c.getFlagNameWithShortName(*flg)
+		if _, ok := c.flagsets[*flg]; !ok {
+			return false
+		}
+	}
+
+	return true
 }

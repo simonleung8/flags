@@ -1,9 +1,10 @@
 package cliFlags
 
 type StringFlag struct {
-	Name  string
-	Value string
-	Usage string
+	Name      string
+	Value     string
+	Usage     string
+	ShortName string
 }
 
 func (f *StringFlag) Set(v string) {
@@ -16,6 +17,10 @@ func (f *StringFlag) String() string {
 
 func (f *StringFlag) GetName() string {
 	return f.Name
+}
+
+func (f *StringFlag) GetShortName() string {
+	return f.ShortName
 }
 
 func (f *StringFlag) GetValue() interface{} {

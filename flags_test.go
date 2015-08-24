@@ -21,7 +21,7 @@ var _ = Describe("Flags", func() {
 			BeforeEach(func() {
 				cmdFlagMap = make(map[string]FlagSet)
 
-				cmdFlagMap["name"] = &cliFlags.StringFlag{Name: "name", Usage: "test string flag"}
+				cmdFlagMap["name"] = &cliFlags.StringFlag{Name: "name", ShortName: "n", Usage: "test string flag"}
 				cmdFlagMap["skip"] = &cliFlags.BoolFlag{Name: "skip", Usage: "test bool flag"}
 				cmdFlagMap["instance"] = &cliFlags.IntFlag{Name: "instance", Usage: "test int flag"}
 				cmdFlagMap["float"] = &cliFlags.Float64Flag{Name: "float", Usage: "test float64 flag"}
@@ -37,6 +37,24 @@ var _ = Describe("Flags", func() {
 
 				err = fCtx.Parse("-name", "")
 				Ω(err).ToNot(HaveOccurred())
+			})
+
+			It("sets a flag with it's full name", func() {
+				err := fCtx.Parse("-name", "blue")
+				Ω(err).ToNot(HaveOccurred())
+				Ω(fCtx.IsSet("name")).To(BeTrue())
+				Ω(fCtx.IsSet("n")).To(BeTrue())
+				Ω(fCtx.String("name")).To(Equal("blue"))
+				Ω(fCtx.String("n")).To(Equal("blue"))
+			})
+
+			It("sets a flag with it's short name", func() {
+				err := fCtx.Parse("-n", "red")
+				Ω(err).ToNot(HaveOccurred())
+				Ω(fCtx.IsSet("name")).To(BeTrue())
+				Ω(fCtx.IsSet("n")).To(BeTrue())
+				Ω(fCtx.String("name")).To(Equal("red"))
+				Ω(fCtx.String("n")).To(Equal("red"))
 			})
 
 			It("checks if a flag is defined in the FlagContext", func() {
