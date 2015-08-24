@@ -25,31 +25,31 @@ Import "github.com/simonleung8/flags"
 
 func main(){
   fc := flags.New()
-  fc.NewStringFlag("s", "string flag name s")  //name and usage of the string flag
+  fc.NewStringFlag("password", "p", "flag for password")  //name, short_name and usage of the string flag
   fc.Parse(os.Args...)  //parse the OS arguments
-  println("Flag 's' is set: ", fc.IsSet("s"))
-  println("Flag 's' value: ", fc.String("s"))
+  println("Flag 'password' is set: ", fc.IsSet("s"))
+  println("Flag 'password' value: ", fc.String("s"))
 }
 ```
 Running the above code
 ```
-$ main -s abc
-Flag 's' is set: true
-Flag 's' value: abc
+$ main -password abc
+Flag 'password' is set: true
+Flag 'password' value: abc
 ```
 
 # Available Flag Constructor
 Flags: String, Int, float64, Bool, String Slice
 ```Go
-NewStringFlag(name string, usage string)
-NewStringFlagWithDefault(name string, usage string, default string)
-NewIntFlag(name string, usage string)
-NewIntFlagWithDefault(name string, usage string, default int)
-NewFloat64Flag(name string, usage string)
-NewFloat64FlagWithDefault(name string, usage string, default float64)
-NewStringSliceFlag(name string, usage string)
-NewStringSliceFlagWithDefault(name string, usage string, default []string)
-NewBoolFlag(name string, usage string)
+NewStringFlag(name string, shortName string, usage string)
+NewStringFlagWithDefault(name string, shortName string, usage string, default string)
+NewIntFlag(name string, shortName string, usage string)
+NewIntFlagWithDefault(name string, shortName string, usage string, default int)
+NewFloat64Flag(name string, shortName string, usage string)
+NewFloat64FlagWithDefault(name string, shortName string, usage string, default float64)
+NewStringSliceFlag(name string, shortName string, usage string)
+NewStringSliceFlagWithDefault(name string, shortName string, usage string, default []string)
+NewBoolFlag(name string, shortName string, usage string)
 ```
 
 # Functions for flags/args reading
@@ -66,8 +66,8 @@ Args()[]string
 # Parsing flags and arguments
 ```Go
 fc := flags.New()
-fc.NewIntFlag("i", "Int flag name i")  //set up a Int flag '-i'
-fc.NewBoolFlag("verbose", "Bool flag name verbose")  //set up a bool flag '-verbose'
+fc.NewIntFlag("i", "", "Int flag name i")  //set up a Int flag '-i'
+fc.NewBoolFlag("verbose", "v", "Bool flag name verbose")  //set up a bool flag '-verbose'
 err := fc.Parse(os.Args...) //Parse() returns any error it finds during parsing
 If err != nil {
   fmt.Println("Parsing error:", err)
