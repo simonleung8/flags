@@ -65,7 +65,7 @@ Args()[]string
 
 # Parsing flags and arguments
 ```Go
-Parse(args ...string)error  #returns error for any non-defined flags & invalid value for Int, Float64 and Bool flag.
+Parse(args ...string)error  //returns error for any non-defined flags & invalid value for Int, Float64 and Bool flag.
 ```
 Sample Code
 ```Go
@@ -87,7 +87,6 @@ Args: [arg_1 arg_2]
 Verbose: true
 i: 100
 ```
-Parse( ) catches any non-defined flags and invalid value for Int, Float64 and Bool flag.
 
 # Special function
 ```Go
