@@ -41,15 +41,15 @@ Flag 'password' value: abc
 # Available Flag Constructor
 Flags: String, Int, float64, Bool, String Slice
 ```Go
-NewStringFlag(name string, shortName string, usage string)
-NewStringFlagWithDefault(name string, shortName string, usage string, default string)
-NewIntFlag(name string, shortName string, usage string)
-NewIntFlagWithDefault(name string, shortName string, usage string, default int)
-NewFloat64Flag(name string, shortName string, usage string)
-NewFloat64FlagWithDefault(name string, shortName string, usage string, default float64)
-NewStringSliceFlag(name string, shortName string, usage string) //this flag can be supplied more than 1 time
-NewStringSliceFlagWithDefault(name string, shortName string, usage string, default []string)
-NewBoolFlag(name string, shortName string, usage string)
+NewStringFlag(name string, short_name string, usage string)
+NewStringFlagWithDefault(name string, short_name string, usage string, value string)
+NewIntFlag(name string, short_name string, usage string)
+NewIntFlagWithDefault(name string, short_name string, usage string, value int)
+NewFloat64Flag(name string, short_name string, usage string)
+NewFloat64FlagWithDefault(name string, short_name string, usage string, value float64)
+NewStringSliceFlag(name string, short_name string, usage string) //this flag can be supplied more than 1 time
+NewStringSliceFlagWithDefault(name string, short_name string, usage string, value []string)
+NewBoolFlag(name string, short_name string, usage string)
 ```
 
 # Functions for flags/args reading
