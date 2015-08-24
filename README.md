@@ -47,23 +47,27 @@ NewIntFlag(name string, shortName string, usage string)
 NewIntFlagWithDefault(name string, shortName string, usage string, default int)
 NewFloat64Flag(name string, shortName string, usage string)
 NewFloat64FlagWithDefault(name string, shortName string, usage string, default float64)
-NewStringSliceFlag(name string, shortName string, usage string)
+NewStringSliceFlag(name string, shortName string, usage string) //this flag can be supplied more than 1 time
 NewStringSliceFlagWithDefault(name string, shortName string, usage string, default []string)
 NewBoolFlag(name string, shortName string, usage string)
 ```
 
 # Functions for flags/args reading
 ```Go
-IsSet(string)bool
-String(string)string
-Int(string)int
-Float64(string)float64
-Bool(string)bool
-StringSlice(string)[]string  //this flag can be supplied more than 1 time
+IsSet(flag_name string)bool
+String(flag_name string)string
+Int(flag_name string)int
+Float64(flag_name string)float64
+Bool(flag_name string)bool
+StringSlice(flag_name string)[]string  
 Args()[]string
 ```
 
 # Parsing flags and arguments
+```Go
+Parse(args ...string)error
+```
+Sample Code
 ```Go
 fc := flags.New()
 fc.NewIntFlag("i", "", "Int flag name i")  //set up a Int flag '-i'
