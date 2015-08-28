@@ -17,6 +17,7 @@ var _ = Describe("Showing Flags Usage", func() {
 	BeforeEach(func() {
 		fc = flags.New()
 		fc.NewIntFlag("intFlag", "i", "Usage for intFlag")
+		fc.NewIntFlag("m", "", "Usage for intFlag")
 		fc.NewBoolFlag("boolFlag", "b", "Usage for boolFlag")
 		fc.NewBoolFlag("f", "", "Usage for f")
 	})
@@ -28,9 +29,17 @@ var _ = Describe("Showing Flags Usage", func() {
 		Ω(outputs).To(ContainSubstring("--boolFlag, -b"))
 	})
 
+	It("prints full flag name with double dashes (--) if shortName exists", func() {
+		outputs := fc.ShowUsage(1)
+		Ω(outputs).To(ContainSubstring(" --intFlag"))
+		Ω(outputs).To(ContainSubstring(" -m"))
+		Ω(outputs).To(ContainSubstring(" -f"))
+		Ω(outputs).To(ContainSubstring(" --boolFlag, -b"))
+	})
+
 	It("prefixes the flag name with spaces", func() {
 		outputs := fc.ShowUsage(5)
-		Ω(outputs).To(ContainSubstring("     -intFlag"))
+		Ω(outputs).To(ContainSubstring("     --intFlag"))
 		Ω(outputs).To(ContainSubstring("     -f"))
 		Ω(outputs).To(ContainSubstring("     --boolFlag"))
 	})
@@ -63,7 +72,7 @@ var _ = Describe("Showing Flags Usage", func() {
 
 	It("aligns the text by padding string with spaces", func() {
 		outputs := fc.ShowUsage(0)
-		Ω(outputs).To(ContainSubstring("-intFlag, -i        Usage for intFlag"))
+		Ω(outputs).To(ContainSubstring("--intFlag, -i       Usage for intFlag"))
 		Ω(outputs).To(ContainSubstring("-f                  Usage for f"))
 		Ω(outputs).To(ContainSubstring("--boolFlag, -b      Usage for boolFlag"))
 	})

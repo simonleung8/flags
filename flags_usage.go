@@ -6,8 +6,6 @@ func (c *flagContext) ShowUsage(leadingSpace int) string {
 	output := ""
 
 	if len(c.cmdFlags) != 0 {
-		output += "\n"
-
 		//find longest name length
 		l := 0
 		for n, f := range c.cmdFlags {
@@ -24,7 +22,7 @@ func (c *flagContext) ShowUsage(leadingSpace int) string {
 		for n, f := range c.cmdFlags {
 			shortName := f.GetShortName()
 			if shortName != "" {
-				n = n + ", -" + shortName
+				n = "-" + n + ", -" + shortName
 			}
 
 			switch f.GetValue().(type) {
