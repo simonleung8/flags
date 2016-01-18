@@ -4,7 +4,7 @@
 - Fully tested, reliable
 - Support flag ShortName (Alias)
 - Catches any non-defined flags, and any invalid flag values
-- Flags can come before or after the arguments. The followings are all valid inputs:
+- Flags are allowed to come before or after the arguments. The followings are all valid inputs:
 ```bash
 $ testapp -i 100 -m 500 arg1 arg2   # flags go first
 $ testapp arg1 arg2 --i 100 -m 500  # flags go last
