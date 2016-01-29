@@ -20,11 +20,19 @@ var _ = Describe("Showing Flags Usage", func() {
 		fc.NewIntFlag("m", "", "Usage for intFlag")
 		fc.NewBoolFlag("boolFlag", "b", "Usage for boolFlag")
 		fc.NewBoolFlag("f", "", "Usage for f")
+		fc.NewBoolFlag("long_flag_1", "", "")
+		fc.NewBoolFlag("long_flag_2", "", "")
+	})
+
+	It("prepends long flag name with --", func() {
+		outputs := fc.ShowUsage(0)
+		Ω(outputs).To(ContainSubstring("--long_flag_1"))
+		Ω(outputs).To(ContainSubstring("--long_flag_2"))
 	})
 
 	It("prints both the full and short flag name", func() {
 		outputs := fc.ShowUsage(0)
-		Ω(outputs).To(ContainSubstring("-intFlag, -i"))
+		Ω(outputs).To(ContainSubstring("--intFlag, -i"))
 		Ω(outputs).To(ContainSubstring("-f"))
 		Ω(outputs).To(ContainSubstring("--boolFlag, -b"))
 	})

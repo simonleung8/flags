@@ -20,9 +20,12 @@ func (c *flagContext) ShowUsage(leadingSpace int) string {
 		}
 		//print non-bool flags first
 		for n, f := range c.cmdFlags {
+			if len(n) > 1 {
+				n = "-" + n
+			}
 			shortName := f.GetShortName()
 			if shortName != "" {
-				n = "-" + n + ", -" + shortName
+				n = n + ", -" + shortName
 			}
 
 			switch f.GetValue().(type) {
