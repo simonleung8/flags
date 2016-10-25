@@ -21,14 +21,17 @@ go get github.com/simonleung8/flags  # installs the flags library
 ```Go
 package main
 
-Import "github.com/simonleung8/flags"
+import (
+	"github.com/simonleung8/flags"
+	"os"
+)
 
 func main(){
-  fc := flags.New()
-  fc.NewStringFlag("password", "p", "flag for password")  //name, short_name and usage of the string flag
-  fc.Parse(os.Args...)  //parse the OS arguments
-  println("Flag 'password' is set: ", fc.IsSet("s"))
-  println("Flag 'password' value: ", fc.String("s"))
+	fc := flags.New()
+	fc.NewStringFlag("password", "p", "flag for password")  //name, short_name and usage of the string flag
+	fc.Parse(os.Args...)  //parse the OS arguments
+	println("Flag 'password' is set: ", fc.IsSet("p"))
+	println("Flag 'password' value: ", fc.String("p"))
 }
 ```
 Running the above code
