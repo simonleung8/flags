@@ -1,6 +1,6 @@
 package cliFlags
 
-//StringSlice flag can be define multiple times in the arguments
+//StringSlice flag can be defined multiple times in the arguments
 type StringSliceFlag struct {
 	Name      string
 	Value     []string
